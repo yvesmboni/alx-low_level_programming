@@ -38,10 +38,10 @@ int op_mul(int a, int b)
 
 /**
  * op_div - calculates the division of two integers
- * @a: first integer
- * @b: second integer
+ *  @a: first integer
+ *  @b: second integer
  *
- * Return: result of the division of a and b
+ *  Return: result of the division of a and b
  */
 int op_div(int a, int b)
 {
