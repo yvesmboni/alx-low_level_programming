@@ -3,44 +3,43 @@
 /**
  * string_nconcat - concatenates two strings.
  * @s1: first string
- * @s2: second string
- * @n: index
- * Return: char pointer
+ * @s2: String to add to end of s1
+ * @n: Amount of s2 to add to s1
+ *
+ * Return: pointer to new area in memory, NULL if it fails
  */
-
 char *string_nconcat(char *s1, char *s2, unsigned int n)
 {
-	char *p;
-	unsigned int size1 = 0, size2 = 0, i;
+	char *nstr, *empt;
+	unsigned int i, len, j;
+	unsigned int size;
 
+	len = 0;
+	empt = "";
 	if (s1 == NULL)
-		s1 = "";
-
+		s1 = empt;
 	if (s2 == NULL)
-		s2 = "";
+		s2 = empt;
 
-	while (s1[size1] != '\0')
+	while (s1[len] != '\0')
+		len++;
+	size = (len + n) * sizeof(*nstr);
+	nstr = malloc(size + 1);
+	if (nstr == NULL)
+		return (NULL);
+	i = 0;
+	while (i < size && s1[i] != '\0')
 	{
-		size1++;
+		nstr[i] = s1[i];
+		i++;
 	}
-
-	if (n > size2)
-		n = size2;
-	p = malloc((size1 + n + 1) * sizeof(char));
-
-	if (p == NULL)
-		return (0);
-
-	for (i = 0; i < size1; i++)
+	j = 0;
+	while (i < size && s2[j] != '\0')
 	{
-		p[i] = s1[i];
+		nstr[i] = s2[j];
+		i++;
+		j++;
 	}
-
-	for (; i < (size1 + n); i++)
-	{
-		p[i] = s2[i - size1];
-	}
-	p[i] = '\0';
-
-	return (p);
+	nstr[i] = '\0';
+	return (nstr);
 }
