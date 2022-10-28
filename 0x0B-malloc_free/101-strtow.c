@@ -1,43 +1,66 @@
 #include "main.h"
+
 /**
- * argstostr - prints args
- * @ac: takes in width of grid
- * @av: height of grid
- * Return: the args one line at a time
+ * _isspace - check if a character is whitespace
+ * @c:check the character
+ *
+ * Return: 1 is c is a whitespace character, otherwise 0
  */
-
-char *argstostr(int ac, char **av)
+int _isspace(int c)
 {
-	char *str;
-	int count = 0, a = 0, b = 0, c = 0;
+	if (c == 0x20 || (c >= 0x09 && c <= 0x0d))
+		return (1);
+	return (0);
+}
 
-	if (ac == 0 || av == NULL)
+
+/**
+ * strtow - split a string into words
+ * @str: a pointer to the string to split
+ *
+ * Return: NULL if memory allocation fails or if str is NULL or empty (""),
+ * otherwise return a pointer to the array of words terminated by a NULL
+ */
+char **strtow(char *str)
+{
+	char **words, *pos = str;
+	int w = 0, c;
+
+	if (!(str && *str))
 		return (NULL);
-	while (a < ac)
-	{
-		b = 0;
-		while (av[a][b] != '\0')
-		{
-			count++;
-			b++;
-		}
-		a++;
-	}
-	count = count + ac + 1;
-	str = malloc(sizeof(char) * count);
-	if (str == NULL)
-	{
+	do {
+		while (_isspace(*pos))
+			++pos;
+		if (!*pos)
+			break;
+		while (*(++pos) && !_isspace(*pos))
+			;
+	} while (++w, *pos);
+	if (!w)
 		return (NULL);
-	}
-	for (a = 0; a < ac; a++)
-	{
-		for (b = 0; av[a][b] != '\0'; b++)
+	words = (char **) malloc(sizeof(char *) * (w + 1));
+	if (!words)
+		return (NULL);
+	w = 0, pos = str;
+	do {
+		while (_isspace(*pos))
+			++pos;
+		if (!*pos)
+			break;
+		for (str = pos++; *pos && !_isspace(*pos); ++pos)
+			;
+		words[w] = (char *) malloc(sizeof(char) * (pos - str + 1));
+		if (!words[w])
 		{
-			str[c] = av[a][b];
-			c++;
+			while (w >  0)
+				free(words[--w]);
+			free(words);
+			return (NULL);
 		}
-		str[c] = '\n';
-		c++;
-	}
-	return (str);
+		for (c = 0; str < pos; ++c, ++str)
+			words[w][c] = *str;
+		words[w][c] = '\0';
+	} while (++w, *pos);
+	words[w] = NULL;
+	return (words);
 }
