@@ -1,1 +1,1 @@
-functions nested loops
+i have deleted bit anipulation project
